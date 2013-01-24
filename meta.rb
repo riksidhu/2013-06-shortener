@@ -1,4 +1,29 @@
-### Class store methods, not Objects
+##############################################
+## Helpers  -- metaid.rb (courtesy of _why) ##
+##############################################
+
+class Object
+    # The hidden singleton lurks behind everyone
+    def metaclass
+        class << self 
+            self
+        end
+    end
+
+    def meta_eval(&blk)
+        metaclass.instance_eval(&blk)
+    end
+
+    # Adds methods to a metaclass
+    def meta_def(name, &blk)
+        meta_eval { define_method name, &blk }
+    end
+end
+
+###############################################
+
+
+### Classes store methods, not Objects
 
 class Person
   def initialize(name)
@@ -35,7 +60,7 @@ end
 jon.name;  
 # => Jon
 
-####################################
+##########################################
 
 motto = "Eat green vegetables"
 
@@ -47,12 +72,18 @@ def motto.slice(*args)
 end
 
 motto.slice(0..2)
+# => "How dare you!! Our motto is way better than --Eat--"
 
 slogan.slice(0..6)
+# => "We love"
 
 # every class method is stored in a metaclass
 class Chef
+
+    # Read only access to attribute
     attr_reader :name 
+
+    # Read and write access to attribute
     attr_accessor :experience
 
     def initialize(name, experience)
@@ -60,19 +91,44 @@ class Chef
         @experience = experience
     end
 
-    def self.specialty(craft)
+    # class method that defines the
+    # 'specialty' method on the meta
+    # class of 'self'.
+    #
+    # unwrapping method calls:
+    #
+    # metaclass.instance_eval(do 
+    #   define_method(:specialty, do
+    #       "I am a #{craft}!!"
+    #     end) 
+    #   end)
+    def self.specialize(craft)
       meta_def :specialty, do 
         "I am a #{craft}!!"
       end 
     end
+
+    # setter method for name atttribute
+    def name=(name)
+      @name = name
+    end
 end
 
+# Baker class that inherits from Chef
 class Baker < Chef
-    specialty "Swift Baker"
+
+    # method not added to the Chef metaclass, 
+    # but to the derived class Baker.
+    #
+    # this is a method call that dynamically
+    # defines a method call 'specialty' on
+    # Baker as a class method.
+    specialize "Swift Baker"
 end 
 
+# Icer class that inherits from Chef
 class Icer < Chef
-    specialty "Rad icer"
+    specialize "Rad Icer"
 end 
 
 ########################################
@@ -87,27 +143,3 @@ jon = Baker.new("Jon", 13)
 
 jon.specialty
 # => NoMethod...
-
-
-
-##############################################
-## Helpers  -- metaid.rb (courtesy of _why) ##
-##############################################
-
-class Object
-    # The hidden singleton lurks behind everyone
-    def metaclass
-        class << self 
-            self
-        end
-    end
-
-    def meta_eval(&blk)
-        metaclass.instance_eval(&blk)
-    end
-
-    # Adds methods to a metaclass
-    def meta_def(name, &blk)
-        meta_eval { define_method name, &blk }
-    end
-end
