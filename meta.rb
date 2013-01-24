@@ -1,10 +1,11 @@
 ### Class store methods, not Objects
 
-# forgot to include accessor for age
 class Person
   def initialize(name)
     @name = name
   end
+
+  # forgot to include accessor for name
 end
 
 jon = Person.new("Jon")
@@ -50,9 +51,6 @@ motto.slice(0..2)
 slogan.slice(0..6)
 
 # every class method is stored in a metaclass
-
-# not added to the MailTruck metaclass, but to the derived class HappyTruck.
-
 class Chef
     attr_reader :name 
     attr_accessor :experience
@@ -77,8 +75,25 @@ class Icer < Chef
     specialty "Rad icer"
 end 
 
+########################################
 
-### Helpers  -- metaid.rb (courtesy of _why)
+Baker.specialty
+# => "I am a Swift Baker"
+
+Icer.specialty
+# => "I am a Rad Icer"
+
+jon = Baker.new("Jon", 13)
+
+jon.specialty
+# => NoMethod...
+
+
+
+##############################################
+## Helpers  -- metaid.rb (courtesy of _why) ##
+##############################################
+
 class Object
     # The hidden singleton lurks behind everyone
     def metaclass
