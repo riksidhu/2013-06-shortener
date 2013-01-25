@@ -1,8 +1,5 @@
-# run me with 'bundle exec shotgun shortener.rb' 
-# to enable autoreloading of the server when file 
-# changes are saved.
-
 require 'sinatra'
+require "sinatra/reloader" if development?
 require 'active_record'
 
 # Models to Access the database 
