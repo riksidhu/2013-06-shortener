@@ -7,6 +7,15 @@ def app
   Sinatra::Application
 end
 
+set :environment, :test
+
+configure :test do
+    ActiveRecord::Base.establish_connection(
+       :adapter => 'sqlite3',
+       :database =>  'db/test.sqlite3.db'
+     )
+end
+
 describe "URL Shortener" do
   include Rack::Test::Methods
 
