@@ -4,6 +4,7 @@
 
 require 'rspec/core/rake_task'
 
+
 # the default task, called from the command
 # line with no arguments.
 task :default => :spec

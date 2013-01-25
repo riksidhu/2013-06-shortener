@@ -6,6 +6,7 @@ gem 'activerecord'
 gem 'thin'
 gem 'pry'
 gem 'rspec'
+gem 'sqlite3'
 gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
 gem 'guard-rspec'
 
