@@ -14,7 +14,6 @@ ActiveRecord::Base.establish_connection(
 #
 # http://guides.rubyonrails.org/association_basics.html
 class Link < ActiveRecord::Base
-    attr_accessible :url, :short
 end
 
 get '/' do
@@ -22,26 +21,9 @@ get '/' do
 end
 
 post '/new' do
-    url = params[:url]
-    link = Link.find_by_url(url)
-    unless link
-        shortened = Link.create({:url => url})
-        shortened.short = shortened.id.to_s(36)
-        shortened.save
-        link = shortened
-    end
-
-    "#{request.host_with_port}/#{link.short}"
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
 end
 
 ####################################################
 ####  Implement Routes to make the specs pass ######
 ####################################################
-
-get '/:short' do
-    link = Link.find_by_short(params[:short])
-    pass unless link
-
-    redirect 'http://' + link.url
-end
