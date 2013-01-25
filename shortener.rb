@@ -10,6 +10,28 @@ configure :development, :production do
      )
 end
 
+form = <<-eos
+    <form id='myForm'>
+        <input type='text' name="url">
+        <input type="submit" value="Shorten"> 
+    </form>
+    <h2>Results:</h2>
+    <h3 id="display"></h3>
+    <script src="jquery.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $('#myForm').submit(function() {
+            alert("submit!");
+            $.post('/new', function(data){
+                $('#display').html(data);
+                });
+            return false;
+            });
+    });
+    </script>
+eos
+
 # Models to Access the database 
 # through ActiveRecord.  Define 
 # associations here if need be
@@ -19,11 +41,15 @@ class Link < ActiveRecord::Base
 end
 
 get '/' do
-    'Welcome to Sinatra Shortener!'
+    form
 end
 
 post '/new' do
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
+end
+
+get '/jquery.js' do
+    send_file 'jquery.js'
 end
 
 ####################################################
