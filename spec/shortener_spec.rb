@@ -3,13 +3,15 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "../"))
 require 'shortener'
 require 'rack/test'
 
-def app
-  Sinatra::Application
-end
+set :environment, :test
 
 describe "URL Shortener" do
   include Rack::Test::Methods
 
+  def app
+    Sinatra::Application
+  end
+  
   context "successful requests" do
     it "can shorten a link" do
       post '/new', :url => 'www.nyt.com' 
