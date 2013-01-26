@@ -10,6 +10,11 @@ configure :development, :production do
      )
 end
 
+# Quick and dirty form for testing application
+#
+# If building a real application you should probably
+# use views: 
+# http://www.sinatrarb.com/intro#Views%20/%20Templates
 form = <<-eos
     <form id='myForm'>
         <input type='text' name="url">
@@ -22,8 +27,8 @@ form = <<-eos
     <script type="text/javascript">
         $(function() {
             $('#myForm').submit(function() {
-            alert("submit!");
-            $.post('/new', function(data){
+            data = $(this).find(input).val();
+            $.post('/new', { url : data }, function(data){
                 $('#display').html(data);
                 });
             return false;
