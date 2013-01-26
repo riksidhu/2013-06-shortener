@@ -27,8 +27,7 @@ form = <<-eos
     <script type="text/javascript">
         $(function() {
             $('#myForm').submit(function() {
-            data = $(this).find(input).val();
-            $.post('/new', { url : data }, function(data){
+            $.post('/new', $("#myForm").serialize(), function(data){
                 $('#display').html(data);
                 });
             return false;
