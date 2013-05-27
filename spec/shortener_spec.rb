@@ -28,15 +28,27 @@ describe "URL Shortener" do
       last_response.body.should_not be_empty  
     end
 
-    it "returns the same short-url for the same link" do
-      url = 'www.google.com'
-      post '/new', :url => url
-      last_response.body.should_not be_empty
-      short_link = last_response.body
+    context "for the same link" do
+      before do
+        @url = 'www.google.com'
+        post '/new', :url => @url
+        last_response.body.should_not be_empty
+        @short_link = last_response.body
+      end
 
-      5.times do
-        post '/new', :url => url
-        last_response.body.should == short_link
+      it "returns the same short-url" do
+        5.times do
+          post '/new', :url => @url
+          last_response.body.should == @short_link
+        end
+      end
+
+      it "does not create extra database entries" do
+        expect {
+          5.times do
+            post '/new', :url => @url
+          end
+        }.to_not change{ Link.count }
       end
     end
 
