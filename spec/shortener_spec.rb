@@ -53,13 +53,13 @@ describe "URL Shortener" do
     end
 
     it "short-urls redirect correctly" do
-      post '/new', :url => 'www.catalystclass.com'
+      post '/new', :url => 'www.hackreactor.com'
       short_link = last_response.body
 
       get '/' + short_link.split('/')[1]
       last_response.should be_redirect 
       follow_redirect!
-      last_request.url.should == 'http://www.catalystclass.com/'
+      last_request.url.should == 'http://www.hackreactor.com/'
     end
   end
   
