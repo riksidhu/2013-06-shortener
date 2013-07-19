@@ -8,4 +8,10 @@
 
 class CreateLinks < ActiveRecord::Migration
     # PUT MIGRATION CODE HERE TO SETUP DATABASE
+    def change
+      create_table :links do |t|
+        t.string :fullurl
+        t.string :shorturl
+      end
+    end
 end

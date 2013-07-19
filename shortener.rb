@@ -50,6 +50,7 @@ end
 
 post '/new' do
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
+    @link = Link.create(longurl: 'http://www.google.com', shorturl: 'http://t.com/1')
 end
 
 get '/jquery.js' do
