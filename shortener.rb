@@ -50,7 +50,14 @@ end
 
 post '/new' do
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
-    @link = Link.create(longurl: 'http://www.google.com', shorturl: 'http://t.com/1')
+    def make_token
+      ("%d%d" % [rand(100), Time.now.to_i]).to_i.to_s(36)
+    end
+
+    short_url = make_token
+
+    @link = Link.create(fullurl: @params['url'], shorturl: short_url)
+    '<a href="http://localhost:4567/r/'+short_url+'">http://localhost:4567/r/'+short_url+'</a>'
 end
 
 get '/jquery.js' do
@@ -60,3 +67,27 @@ end
 ####################################################
 ####  Implement Routes to make the specs pass ######
 ####################################################
+
+get '/r/:url' do
+  @lookup = Link.find_by_shorturl(@params[:url])
+  redirect @lookup.fullurl
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
