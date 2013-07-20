@@ -18,7 +18,7 @@ end
 
 namespace :db do
    task :environment do
-        ActiveRecord::Base.establish_connection :adapter => 'sqlite3', :database =>  'db/dev.sqlite3.db'
+        ActiveRecord::Base.establish_connection :adapter => 'sqlite3', :database =>  'db/test.sqlite3.db'
    end
  
 

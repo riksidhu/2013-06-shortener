@@ -17,10 +17,10 @@ end
 # http://www.sinatrarb.com/intro#Views%20/%20Templates
 form = <<-eos
     <form id='myForm'>
-        <input type='text' name="url">
-        <input type="submit" value="Shorten"> 
+        <input type='text' name="url" style="width: 400px; height: 25px; font: 20px 'Helvetica Neue', Helvetica, sans-serif;">
+        <input type="submit" value="Shorten">
     </form>
-    <h2>Results:</h2>
+    <h2 style="font: bold italic 28px 'Helvetica Neue', Helvetica, sans-serif;">Results:</h2>
     <h3 id="display"></h3>
     <script src="jquery.js"></script>
 
@@ -54,10 +54,23 @@ post '/new' do
       ("%d%d" % [rand(100), Time.now.to_i]).to_i.to_s(36)
     end
 
-    short_url = make_token
+    # get the full url from the page
+    # look it up in the db
+    # if the record exits, return the short url
+    # if not, create new one
+    input_url = @params['url']
+    # TODO come back to this regex
+    # .gsub(/^https?:\/\/?www./, "")
+    @check = Link.find_by_fullurl(input_url)
 
-    @link = Link.create(fullurl: @params['url'], shorturl: short_url)
-    '<a href="http://localhost:4567/r/'+short_url+'">http://localhost:4567/r/'+short_url+'</a>'
+    if @check == nil
+        short_url = make_token
+        @link = Link.create(fullurl: input_url, shorturl: short_url)
+    else
+        short_url = @check.shorturl
+    end
+    # '<a href="http://localhost:4567/r/'+short_url+'">http://localhost:4567/r/'+short_url+'</a>'
+    'http://localhost:4567/r/'+short_url
 end
 
 get '/jquery.js' do
@@ -72,7 +85,6 @@ get '/r/:url' do
   @lookup = Link.find_by_shorturl(@params[:url])
   redirect @lookup.fullurl
 end
-
 
 
 
